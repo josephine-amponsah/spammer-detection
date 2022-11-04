@@ -1,0 +1,23 @@
+.main-space{
+    background-color:#e1f6f6;
+    height: 100vh;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-left: 60px;
+    padding-right: 60px;
+}
+
+.app-container{
+    height: 100%; 
+    padding: 20px;
+    
+
+}
+
+.app-card{
+    background-color: #ffffff;
+    height: 100%;
+    padding: 10px;
+    border-radius: 10px;
+
+}
