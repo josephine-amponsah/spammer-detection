@@ -6,8 +6,8 @@
     height: 100vh;
     padding-top: 25px;
     padding-bottom: 25px;
-    padding-left: 50px;
-    padding-right: 50px;
+    padding-left: 30px;
+    padding-right: 30px;
 }
 
 .app-container{
@@ -36,5 +36,9 @@
 }
 
 .active-space{
+    padding: 10px;
+}
+
+.input-section{
     padding: 10px;
 }
