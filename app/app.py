@@ -4,7 +4,9 @@ import plotly.express as px
 import pandas as pd
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
+from sklearn.preprocessing import StandardScaler
 import re
+import pickle 
 
 
 # from app.pages import sales
@@ -153,11 +155,14 @@ def run_assessment(username, fullname, bio, pic, privacy, url, followers, follow
     
 }
     df = pd.DataFrame(data_dict)
-    prediction = model.predict(df)
-    return
+    scaler = StandardScaler()
+    scaled_data =scaler.fit_transform(df)
+    prediction = model.predict(scaled_data)
+    return prediction
 
 
 
 if __name__ == '__main__':
+    model = pickle.load(open("../models/LRmodel.sav", 'rb'))
     app.run_server(debug=True)
 
