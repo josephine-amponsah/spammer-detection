@@ -15,23 +15,6 @@ app = dash.Dash(__name__,  external_stylesheets=[ FA,
                 dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP])
 # app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP])
 
-data_dict = {
-    "profile_pic": "", 
-    "num_per_length_username": "",
-    "fullname_words": "",
-    "num_per_length_fullname":"",
-    "fullname_is_username": "",
-    "bio_length": "",
-    "url_in_bio": "",
-    "private":"",
-    "#posts":"",
-    "#followers":"",
-    "#follows":""
-    
-}
-
-
-
 
 app.layout = html.Div([
     html.Div([
