@@ -1,0 +1,82 @@
+@import url("https://fonts.googleapis.com/css?family=Lobster");
+
+
+.main-space{
+    /* background-color:#e1f6f6; */
+    height: 100vh;
+    padding-top: 5px;
+    padding-bottom: 25px;
+    padding-left: 30px;
+    padding-right: 30px;
+    background-color: #ebf1fd;
+}
+
+.app-container{
+    height: 100%; 
+    padding: 10px;
+    
+
+}
+
+.app-card{
+    /* background-color: #ffffff; */
+    height: 100%;
+    padding: 10px;
+    border-radius: 15px;
+
+}
+
+.app-title-text{
+    /* font-family: "Lobster", serif; */
+    color: #000000;
+    text-align: center;
+}
+
+.app-title-sub{
+    font-size: 5px;
+    text-align: center;
+}
+
+.active-space{
+    padding-bottom: 5px;
+    padding-left: 30px;
+    padding-top: 20px;
+    justify-content: center;
+    box-shadow: 3px 3px 5px 5px #b0c5f5;
+}
+
+.input-card{
+    padding-left: 10px;
+    border-color: #ffffff;
+    border-width: 0px;
+    border: none;
+    color: #2d56b3;
+    font-size: 15px;
+    font-weight: 500;
+}
+.input-long-box{
+    width: 100%;
+    border-color: #3a6fe6 ;
+    border-width: 1px;
+    border-radius: 10px;
+    /* height: 100%; */
+}
+
+.trigger-button{
+    background-color:#2d56b3;
+    font-weight: bold;
+}
+
+.image-card{
+    border-color: #ffffff;
+    height: 100%;
+}
+/* .image-search{
+    height: 100vh;
+} */
+.dropdown-box{
+    width: 80%;
+    border-color: #3a6fe6 ;
+    /* background-color: #3a6fe6 ; */
+    border-width: 5px;
+}
