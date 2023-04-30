@@ -1,1 +1,7 @@
+<<<<<<< HEAD
 .venv/
+=======
+.env/
+detect/
+notebooks/app-testing.ipynb
+>>>>>>> f40a52cecdb3c862095d3b291bcaf1bdf799bc49
