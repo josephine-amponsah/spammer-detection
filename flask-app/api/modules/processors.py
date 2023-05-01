@@ -6,9 +6,12 @@ import sklearn
 from apify_client import ApifyClient
 from modules.dataModels import DataSet, OutputData, ProcessedData
 from typing import List, Optional
+from pydantic import parse_file_as
+import re
+import emoji
 
 data_file = "data.json"
-
+input_file = "input.json"
 # data collection function
 
 
@@ -29,34 +32,54 @@ def retrieve_data(profile):
         json.dump(dict, file)
 
 
-def get_likes(profile):
-    for k, v in profile.items():
-        if k == 'latestPosts':
-            info = list()
-            for index, y in enumerate(v):
-                info.append(v[index]['likesCount'])
-            # index +=1
-
-    med_likes = info.mean()
+def get_likes(data):
+    likes = data["likes_"]
+    med_likes = np.median(likes)
     return med_likes
 
 
-def post_info(posts):
-    # likes = posts.likes
-    return
+pattern = r'[^a-zA-Z\d\s:]'
+
+
+def fullname_features(df):
+    features = {}
+
+    fullname = df["fullName"]
+    full_len = len(fullname)
+    full_digits = fullname.str.count('\d')
+    full_characters = len(re.findall(pattern, fullname))
+    features = {"full_len": full_len, "full_digits": full_digits,
+                "full_characters": full_characters}
+    return features
+
+
+def bio_features(df):
+    features = {}
+
+    bio = df["biography"]
+    bio_len = len(bio)
+    bio_emojis = len(emoji.emoji_list(bio))
+    features = {"bio_len": bio_len, "bio_emojis": bio_emojis}
+    return features
 
 
 def process_data(data: DataSet):
-    # user_digits = username.digits
-    # full_digits = username.digits
-    # full_len = username.digits
-    # full_characters = username.digits
-    # bio_len = username.digits
-    # bio_emojis = bio_len
+    df = parse_file_as(DataSet, "data.json")
+    name_features = fullname_features(df)
+    med_likes = get_likes(df)
+    bio_data = bio_features(df)
+    merged_dict = {**df, **name_features, **bio_data}
+    merged_dict["med_likes"] = med_likes
+    unwanted = ["username", "fullName", "biography"]
+    for key in unwanted:
+        merged_dict.pop(key, None)
+    with open(input_file, "w") as file:
+        json.dump(merged_dict, file)
 
-    return
 
-
-def classifyer(input, data: ProcessedData):
-    # model = joblib.load('../models/final_model.pkl')
-    return
+def classifyer(data: ProcessedData):
+    df = parse_file_as(ProcessedData, "input.json")
+    df = pd.DataFrame(df)
+    model = joblib.load('../models/final_model.pkl')
+    output = model.predict(df)
+    return output
