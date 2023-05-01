@@ -1,6 +1,6 @@
 
 from fastapi import FastAPI , Depends
-from modules import processors
+from modules.processors import retrieve_data , classifyer
 import requests
 from modules.dataModels import DataSet , OutputData , ProcessedData
 from fastapi . encoders import jsonable_encoder
@@ -20,8 +20,13 @@ async def retrieve_user(username : str):
     # print("After client.actor")
     dataset = client.dataset(run['defaultDatasetId'])
     items = dataset.list_items().items
-    output = processors.retrieve_data(items)
-    return jsonable_encoder(output)
+    # output = processors.retrieve_data(items)
+    return jsonable_encoder(items)
+
+@app.get('user/state')
+async def classify_user(profile: ProcessedData):
+    output = classifyer(profile)
+    return
 
 
 

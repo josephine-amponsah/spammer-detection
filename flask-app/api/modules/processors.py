@@ -7,41 +7,36 @@ from apify_client import ApifyClient
 from modules.dataModels import DataSet , OutputData , ProcessedData
 from typing import List , Optional
 
-
-
-def retrieve_data(profile):
-    data_list = list()
-    for x in profile:
-        dict = {}
-        for k, v in x.items():
+def get_likes(profile):
+    for k, v in profile.items():
             if k == 'latestPosts':
                 info = list()
                 for index, y in enumerate(v):
                     info.append(v[index]['likesCount'])
                 # index +=1
-                dict["likes_"] = info
-            else:
-                dict[k] = v
-        data_list.append(dict)
-        
+                
+    med_likes = info.mean()
+    return med_likes
+
+def retrieve_data(profile):
+
+    username = profile["username"]
+    full_name = profile["fullName"]
+    biography  = profile["biography"]
+    followers  = profile["followersCount"]
+    follows  = profile["followsCount"]
+    likes  = get_likes(profile)
+    reel_count = profile["highlightReelCount"]
+    igtv_count =  profile["igtvVideoCount"]
+    post_count = profile["postsCount"]
     
-    # username = profile.username
-    # full_name = profile.full_name
-    # biography  = profile.biography
-    # followers  = profile.followers
-    # follows  = profile.followees
-    # # likes : List()
-    # reel_count = profile.reels
-    # igtv_count =  profile.igtv_count
-    # post_count = profile.mediacount
-    
-    return data_list
+    return profile
 
 def post_info(posts):
     # likes = posts.likes
     return
 
-def process_data(info, data: ProcessedData):
+def process_data(data: DataSet):
     # user_digits = username.digits
     # full_digits = username.digits
     # full_len = username.digits
@@ -51,6 +46,6 @@ def process_data(info, data: ProcessedData):
     
     return
 
-def classify_user(input, data: OutputData):
+def classifyer(input, data: ProcessedData):
     # model = joblib.load('../models/final_model.pkl')
     return
