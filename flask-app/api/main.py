@@ -20,11 +20,12 @@ async def retrieve_user(username : str):
     # print("After client.actor")
     dataset = client.dataset(run['defaultDatasetId'])
     items = dataset.list_items().items
-    # output = processors.retrieve_data(items)
-    return jsonable_encoder(items)
+    output = retrieve_data(items)
+    return jsonable_encoder(output)
 
 @app.get('user/state')
 async def classify_user(profile: ProcessedData):
+
     output = classifyer(profile)
     return
 

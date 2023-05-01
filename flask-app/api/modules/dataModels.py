@@ -19,7 +19,7 @@ class DataSet(BaseModel):
 class ProcessedData(BaseModel):
     followers : int
     follows : int
-    med_likes : int
+    med_likes : float
     reel_count : int
     igtv_count : int
     post_count : int
