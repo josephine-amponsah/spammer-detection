@@ -81,8 +81,7 @@ def bio_features(df):
     return features
 
 
-def process_data(data: DataSet):
-    df = parse_file_as(DataSet, "data.json")
+def process_data(df):
     name_features = fullname_features(df)
     med_likes = get_likes(df)
     bio_data = bio_features(df)
@@ -91,12 +90,10 @@ def process_data(data: DataSet):
     unwanted = ["username", "fullName", "biography"]
     for key in unwanted:
         merged_dict.pop(key, None)
-    with open(input_file, "w") as file:
-        json.dump(merged_dict, file)
+    return merged_dict
 
 
-def classifyer(data: ProcessedData):
-    df = parse_file_as(ProcessedData, "input.json")
+def classifyer(data):
     df = pd.DataFrame(df)
     model = joblib.load('../models/final_model.pkl')
     output = model.predict(df)

@@ -1,7 +1,9 @@
 
 from fastapi import FastAPI, Depends
-from modules.processors import retrieve_data, classifyer
+from modules.processors import retrieve_data, collect_data
 import requests
+import tasks
+from tasks import process_classify_data, celery_app
 from modules.dataModels import DataSet, OutputData, ProcessedData
 from fastapi . encoders import jsonable_encoder
 from apify_client import ApifyClient
@@ -13,23 +15,18 @@ app = FastAPI()
 @app.get('/user/{username}')
 async def retrieve_user(username: str):
     # sourcery skip: inline-immediately-returned-variable, remove-unnecessary-else, swap-if-else-branches
-    client = ApifyClient(
-        token='apify_api_BdgKVIBQfeQk9rBpUdoOlNhBG7484q15CTd0')
-    input_data = {
-        "usernames": [username]
-    }
-    # print("Before client.actor")
-    run = client.actor(
-        "apify/instagram-profile-scraper").call(run_input=input_data)
-    # print("After client.actor")
-    dataset = client.dataset(run['defaultDatasetId'])
-    items = dataset.list_items().items
-    output = retrieve_data(items)
-    return jsonable_encoder(output)
+    profile = collect_data(username)
+    if profile["fullName"] == "Restricted profile":
+        return {"error": "Restricted Profile"}
+    else:
+        result = process_classify_data.delay(profile)
+        return {'task_id': tasks.id, 'message': 'Profile data found.'}
 
 
 @app.get('user/state')
-async def classify_user(profile: ProcessedData):
-
-    output = classifyer(profile)
-    return output
+async def classify_user(taskID: str):
+    result = celery_app.AsyncResult(taskID)
+    if result.ready():
+        return {'result': result.result}
+    else:
+        return {'message': 'Verifying authenticity'}
