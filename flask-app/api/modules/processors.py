@@ -15,6 +15,21 @@ input_file = "input.json"
 # data collection function
 
 
+def collect_data(username):
+    client = ApifyClient(
+        token='apify_api_BdgKVIBQfeQk9rBpUdoOlNhBG7484q15CTd0')
+    input_data = {
+        "usernames": [username]
+    }
+    # print("Before client.actor")
+    run = client.actor(
+        "apify/instagram-profile-scraper").call(run_input=input_data)
+    # print("After client.actor")
+    dataset = client.dataset(run['defaultDatasetId'])
+    profile = dataset.list_items().items
+    return profile
+
+
 def retrieve_data(profile):
     wanted = ["username", "fullName", "biography", "followersCount", "followsCount",
               "highlightReelCount", "igtvVideoCount", "postsCount", "latestPosts"]
@@ -28,8 +43,9 @@ def retrieve_data(profile):
             dict["likes_"] = list
         else:
             dict[i] = profile[0][i]
-    with open(data_file, "w") as file:
-        json.dump(dict, file)
+    # with open(data_file, "w") as file:
+    #     json.dump(dict, file)
+    return dict
 
 
 def get_likes(data):
@@ -57,6 +73,8 @@ def bio_features(df):
     features = {}
 
     bio = df["biography"]
+    bio = bio.str.replace('\n', ' ').str.strip()
+    bio = bio.str.replace(' ', '').str.strip()
     bio_len = len(bio)
     bio_emojis = len(emoji.emoji_list(bio))
     features = {"bio_len": bio_len, "bio_emojis": bio_emojis}
