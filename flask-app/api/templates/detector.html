@@ -73,28 +73,32 @@ License: For each use you must have a valid license purchased only from above li
                                 <div class = "col-md-6 grid-margin  d-flex flex-column justify-content-start gap-4 ">
                                     <h1>Instagram Bot Detector</h1>
                                     <br>
-                                    <form class="forms-sample  h-100 d-flex justify-content-between flex-column">
+                                    <form class="forms-sample  h-100 d-flex justify-content-between flex-column" action = "/user" method ='post'>
                                         <div>
                                             <div class="mb-3">
                                                 <label for="exampleInputUsername1" class="form-label">Enter Username</label>
-                                                <input type="text" class="form-control" id="exampleInputUsername1" autocomplete="off" placeholder="Username">
+                                                <input type="text" class="form-control" id="username" name = "username" autocomplete="off" value="{{ username }}" placeholder="Username">
                                             </div>
-                                            
+                                            <div>
+                                            </div>
                                             <div >
                                                 <button type="submit" class="btn btn-primary me-2 w-100">Find Profile</button>
                                             </div>
-
-                                        </div>
-
-                                        <br>
-                                        <div class = "row   h-100">
-                                            <h3>Results...</h3>
-                                        </div>
-                                        <div class = "col-md-12 w-auto">
-                                            <button class="btn btn-secondary w-100">Verify Authenticity</button>
-                                        </div>
-                                        
-                                        
+                                    </form>
+                                    <br>
+                                    
+                                    <div>
+                                      <p>{{ message }}</p>
+                                    </div>
+                                   
+                                    <div class = "row   h-100">
+                                        <h3>Results...</h3>
+                                    </div>
+                                    </div>
+                                    <form action = "/user/state">
+                                    <div class = "col-md-12 w-auto">
+                                        <button class="btn btn-secondary w-100">Verify Authenticity</button>
+                                    </div>
                                     </form>
                                 </div>
                                 <div class = "col-md-6 grid-margin stretch-card">
