@@ -32,7 +32,7 @@ def collect_data(username):
 
 def retrieve_data(profile):
     wanted = ["username", "fullName", "biography", "followersCount", "followsCount",
-              "highlightReelCount", "igtvVideoCount", "postsCount", "latestPosts"]
+              "highlightReelCount", "postsCount", "latestPosts"]
     dict = {}
     for i in wanted:
         if i == 'latestPosts':
@@ -62,10 +62,10 @@ def fullname_features(df):
 
     fullname = df["fullName"]
     full_len = len(fullname)
-    full_digits = fullname.str.count('\d')
+    full_digits = len(re.findall(r'\d', fullname))
     full_characters = len(re.findall(pattern, fullname))
-    features = {"full_len": full_len, "full_digits": full_digits,
-                "full_characters": full_characters}
+    features = {"full_len": full_len, "full_characters": full_characters, "full_digits": full_digits,
+                }
     return features
 
 
@@ -73,28 +73,37 @@ def bio_features(df):
     features = {}
 
     bio = df["biography"]
-    bio = bio.str.replace('\n', ' ').str.strip()
-    bio = bio.str.replace(' ', '').str.strip()
+    bio = bio.replace('\n', ' ')
+    bio = bio.replace(' ', '')
     bio_len = len(bio)
     bio_emojis = len(emoji.emoji_list(bio))
     features = {"bio_len": bio_len, "bio_emojis": bio_emojis}
     return features
 
 
-def process_data(df):
+def process_data(df: DataSet):
     name_features = fullname_features(df)
     med_likes = get_likes(df)
     bio_data = bio_features(df)
-    merged_dict = {**df, **name_features, **bio_data}
-    merged_dict["med_likes"] = med_likes
-    unwanted = ["username", "fullName", "biography"]
+    username = df["username"]
+    user_digits = len(re.findall(r'\d', username))
+    merged_dict = {
+        **df,
+        "med_likes": med_likes,
+        'user_digits': user_digits,
+        **name_features,
+        **bio_data,
+
+    }
+    unwanted = ["username", "fullName",
+                "biography", "likes_"]
     for key in unwanted:
         merged_dict.pop(key, None)
     return merged_dict
 
 
-def classifyer(data):
-    df = pd.DataFrame(df)
-    model = joblib.load('../models/final_model.pkl')
-    output = model.predict(df)
+def classifyer(data: ProcessedData):
+    # df = pd.DataFrame([data])
+    model = joblib.load('models/final_model.pkl')
+    output = model.predict(data)
     return output
